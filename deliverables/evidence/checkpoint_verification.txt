@@ -1,17 +1,16 @@
-Checkpoint verification — status as of 2026-10-15 22:41 IST
+Checkpoint verification — completed 2026-10-15 ~23:14 IST
 
-Source:        https://huggingface.co/facebook/VGGT-1B  (file: model.safetensors)
+Source:          https://huggingface.co/facebook/VGGT-1B  (file: model.safetensors, + config.json)
+Fetch/verify:    scripts/fetch_checkpoint.py (log: logs/checkpoint_download.txt / .log)
+Location:        artifacts/checkpoints/VGGT-1B/ (outside Git)
+Upstream VGGT:   vggt/ submodule, commit a288dd0f14786c93483e45524328726ab7b1b4ce (unmodified)
+Configuration:   VGGT(img_size=518, patch_size=14, embed_dim=1024), enable_point=False, enable_track=False
+
+File size:       5,026,367,224 bytes
+Computed SHA256: f164acf60724910d8fe1578bb499d800850c7bb0948db7555c413f9fbe60467e
 Expected SHA256: f164acf60724910d8fe1578bb499d800850c7bb0948db7555c413f9fbe60467e
-Fetch/verify:  scripts/fetch_checkpoint.py (resumable hf_hub_download; refuses to mark VERIFIED on mismatch)
-Location:      artifacts/checkpoints/VGGT-1B/ (outside Git; artifacts/* is ignored)
-Upstream VGGT: vggt/ submodule, commit a288dd0f14786c93483e45524328726ab7b1b4ce (unmodified)
-Configuration: VGGT(img_size=518, patch_size=14, embed_dim=1024), enable_point=False, enable_track=False
+Result:          MATCH — VERIFIED (VERIFIED_SHA256 written only after match)
 
-STATUS: DOWNLOAD IN PROGRESS — NOT VERIFIED, NOT LOADED
-  bytes on disk (.incomplete): 117,873,844 of roughly 5 GB (exact size recorded on completion)
-  file size / verified hash:   pending
-  checkpoint loaded:           NO
-  real inference pass:         NO
-
-This file will be replaced with the measured size, computed SHA256 and load/inference result
-once verification completes.
+Checkpoint loaded:   YES — VGGT.from_pretrained(artifacts/checkpoints/VGGT-1B) in spectra.deployment.export
+Real inference pass: YES — PyTorch CPU forward on vggt/examples/kitchen/images/00.png + 01.png;
+                     outputs saved to artifacts/vggt-onnx-run2/reference-output.npz (see onnx_parity_report.md)

@@ -1,0 +1,38 @@
+﻿command: .venv\Scripts\python.exe -m spectra.deployment.export vggt/examples/kitchen/images/00.png vggt/examples/kitchen/images/01.png --model-id artifacts/checkpoints/VGGT-1B --output artifacts/vggt-onnx-run1 --device cpu
+started: 2026-10-15 23:15:51 +05:30
+C:\Users\Atharv\spectra-vggt\vggt\vggt\models\vggt.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=False):
+C:\Users\Atharv\spectra-vggt\vggt\vggt\models\vggt.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=False):
+C:\Users\Atharv\spectra-vggt\.venv\Lib\site-packages\torch\export\_unlift.py:81: UserWarning: Attempted to insert a get_attr Node with no underlying reference in the owning GraphModule! Call GraphModule.add_submodule to add the necessary submodule, GraphModule.add_parameter to add the necessary Parameter, or nn.Module.register_buffer to add the necessary buffer
+  getattr_node = gm.graph.get_attr(lifted_node)
+C:\Users\Atharv\spectra-vggt\.venv\Lib\site-packages\torch\fx\graph.py:1772: UserWarning: Node model_aggregator_lifted_tensor_0 target model.aggregator.lifted_tensor_0 lifted_tensor_0 of model.aggregator does not reference an nn.Module, nn.Parameter, or buffer, which is what 'get_attr' Nodes typically target
+  warnings.warn(
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Atharv\spectra-vggt\spectra\deployment\export.py", line 91, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "C:\Users\Atharv\spectra-vggt\spectra\deployment\export.py", line 88, in main
+    result=export_model(model,atlas,args.output,reference_origin=reference)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Atharv\spectra-vggt\spectra\deployment\export.py", line 52, in export_model
+    session=ort.InferenceSession(str(path),sess_options=options,providers=['CPUExecutionProvider'])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Atharv\spectra-vggt\.venv\Lib\site-packages\onnxruntime\capi\onnxruntime_inference_collection.py", line 485, in __init__
+    self._create_inference_session(providers, provider_options, disabled_optimizers)
+  File "C:\Users\Atharv\spectra-vggt\.venv\Lib\site-packages\onnxruntime\capi\onnxruntime_inference_collection.py", line 573, in _create_inference_session
+    sess = C.InferenceSession(session_options, self._model_path, True, self._read_config_from_model)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+onnxruntime.capi.onnxruntime_pybind11_state.Fail: [ONNXRuntimeError] : 1 : FAIL : Load model from artifacts\vggt-onnx-run1\vggt.onnx failed:Type Error: Type parameter (T) of Optype (Einsum) bound to different types (tensor(float) and tensor(double) in node (node_Einsum_27112).
+Loading weights from local directory
+[torch.onnx] Obtain model graph for `AtlasVGGT([...]` with `torch.export.export(..., strict=False)`...
+[torch.onnx] Obtain model graph for `AtlasVGGT([...]` with `torch.export.export(..., strict=False)`... ✅
+[torch.onnx] Run decomposition...
+[torch.onnx] Run decomposition... ✅
+[torch.onnx] Translate the graph into ONNX...
+[torch.onnx] Translate the graph into ONNX... ✅
+[torch.onnx] Export report has been saved to 'artifacts\vggt-onnx-run1\export-report\onnx_export_2026-10-15_23-16-50-637929_success.md'.
+Applied 1256 of general pattern rewrite rules.
+exit code: 1; elapsed: 205 s; finished: 2026-10-15 23:19:16 +05:30

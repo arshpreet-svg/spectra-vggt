@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "model": "VGGT",
+  "reference_origin": {
+    "checkpoint": "artifacts/checkpoints/VGGT-1B",
+    "images": [
+      {
+        "name": "00.png",
+        "sha256": "54527a575988094058cdc1975b421c48e0f446726473d0ac21ea55ecb24e96a7"
+      },
+      {
+        "name": "01.png",
+        "sha256": "0ad4c6d74c16661ed427f8100124aaf53e7fd0577b32c362f13559dfad7027a7"
+      }
+    ],
+    "pretrained": true
+  },
+  "input": {
+    "name": "images",
+    "shape": [
+      1,
+      3,
+      518,
+      1036
+    ],
+    "dtype": "float32",
+    "layout": "NCHW RGB: first view left, second view right; values [0,1]"
+  },
+  "outputs": {
+    "pose_enc": [
+      1,
+      2,
+      9
+    ],
+    "depth": [
+      1,
+      2,
+      518,
+      518
+    ],
+    "depth_conf": [
+      1,
+      2,
+      518,
+      518
+    ]
+  },
+  "preprocessing": "upstream load_and_preprocess_images(mode=pad); no external ImageNet normalization",
+  "fixed_grid_rope_modules": 48,
+  "float64_constants_demoted": [
+    "mul_568",
+    "mul_571",
+    "mul_574",
+    "mul_580"
+  ],
+  "operators": [
+    "Add",
+    "Cast",
+    "Concat",
+    "Conv",
+    "ConvTranspose",
+    "Cos",
+    "Div",
+    "Einsum",
+    "Erf",
+    "Exp",
+    "Expand",
+    "Gather",
+    "LayerNormalization",
+    "Less",
+    "MatMul",
+    "Mul",
+    "Neg",
+    "Relu",
+    "Reshape",
+    "Resize",
+    "Sigmoid",
+    "Sin",
+    "Slice",
+    "Softmax",
+    "Split",
+    "Squeeze",
+    "Sub",
+    "Transpose",
+    "Unsqueeze",
+    "Where"
+  ],
+  "opset": 18,
+  "files": {
+    "reference-input.npy": "b566b0851a049b116b0e940146f8718ff5499485d881eabc05d9a1fae3c5eab0",
+    "reference-output.npz": "c8e9cdbb98be752cc364af94fbda03236109629a7f24464546ab87c913e1cf3d",
+    "vggt.onnx": "d16675bcdb6f804289766e08501a40aa163b782051b77cd5739fba9e3f1d5662",
+    "vggt.onnx.data": "39c88dc6abfa3c14ea7b5518b017dee4555b7bc328a60eddf11c121cb463e274"
+  },
+  "validation": {
+    "onnx_reference_passed": true,
+    "specialization_parity_passed": true,
+    "rtol": 0.001,
+    "atol": 0.0001,
+    "errors": {
+      "pose_enc": {
+        "max_absolute_error": 6.556510925292969e-07
+      },
+      "depth": {
+        "max_absolute_error": 4.100799560546875e-05
+      },
+      "depth_conf": {
+        "max_absolute_error": 0.000644683837890625
+      }
+    },
+    "seconds": 279.7993443000014
+  },
+  "pipegen_verified": false,
+  "tensorrt_verified": false
+}

@@ -1,0 +1,7 @@
+demoted ['mul_568', 'mul_571', 'mul_574', 'mul_580']
+onnx.checker passed
+ORT session created in 20.2s
+ORT CPU inference 29.3s
+pose_enc (1, 2, 9) shape_ok True finite True max_abs 6.556510925292969e-07 allclose(rtol=1e-3,atol=1e-4) True ref range -0.5245421528816223 1.0001059770584106
+depth (1, 2, 518, 518) shape_ok True finite True max_abs 4.100799560546875e-05 allclose(rtol=1e-3,atol=1e-4) True ref range 0.41886040568351746 2.253600597381592
+depth_conf (1, 2, 518, 518) shape_ok True finite True max_abs 0.000644683837890625 allclose(rtol=1e-3,atol=1e-4) True ref range 1.0 18.022598266601562

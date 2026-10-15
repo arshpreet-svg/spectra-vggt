@@ -50,8 +50,8 @@ The intended RTX 5060 target is not present on this machine.
 | Wrapper, export with parity gates, reference pipeline, DeepStream app, TensorRT runtime, Flask viewer | Implemented | `spectra/` |
 | Local unit tests | Tested with a **synthetic** model only | `../evidence/tests.txt` |
 | Checkpoint fetch + SHA256 gate, TensorRT builder script | Implemented this session | `scripts/fetch_checkpoint.py`, `scripts/build_engine.py` |
-| Official checkpoint download | **In progress** (≈65 MB of 5 GB at 2026-10-15 22:21 IST, ~0.2–1 MB/s link) | `evidence/logs/` |
-| Real ONNX export with parity + ONNX Runtime check | **Not yet run** (waits on checkpoint) | — |
+| Official checkpoint download + SHA256 | **Verified** (5,026,367,224 bytes, hash match) | `evidence/checkpoint_verification.txt` |
+| Real PyTorch VGGT inference + ONNX export + ONNX Runtime parity | **Verified** on CPU (run2; run1 failed on a float64 Einsum, fixed) | `evidence/onnx_parity_report.md`, `evidence/onnx_validation.txt` |
 | TensorRT engine on RTX 3050 | **Not yet run** | — |
 | PipeGen Requirement → PIR → Model → Compiler → Run | **Not run** — PipeGen v0.5.1 installer not available on this machine (no WSL2/Docker) | `evidence/environment_check_2026-10-15.txt` |
 | PipeGen speed report, PIR screenshot | **Not produced** | — |

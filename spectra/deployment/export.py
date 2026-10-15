@@ -10,6 +10,32 @@ from .contract import INPUT_NAME, INPUT_SHAPE, OUTPUT_NAMES, OUTPUT_SHAPES, prep
 from .wrapper import AtlasVGGT, specialize_fixed_grid
 
 
+def demote_float64_constants(model_proto, base_dir):
+    """Store float64 initializers as float32 so the graph has one floating type.
+
+    Upstream make_sincos_pos_embed multiplies float32 positions by a float64 omega in an
+    einsum; PyTorch promotes, but the exporter emits a mixed-type Einsum that ONNX Runtime
+    rejects and TensorRT has no float64. Accuracy is still judged by the ONNX Runtime
+    comparison against the float64 PyTorch reference below.
+    """
+    import numpy as np
+    from onnx import TensorProto, numpy_helper
+    graph=model_proto.graph
+    names=[]
+    for index,tensor in enumerate(graph.initializer):
+        if tensor.data_type==TensorProto.DOUBLE:
+            # Small tables; read from the external file if stored there, then keep inline.
+            array=numpy_helper.to_array(tensor,base_dir=str(base_dir)).astype(np.float32)
+            graph.initializer[index].CopyFrom(numpy_helper.from_array(array,tensor.name))
+            names.append(tensor.name)
+    if names:
+        # Drop stale float64 intermediate annotations; ONNX shape inference rederives them.
+        kept=[v for v in graph.value_info if v.type.tensor_type.elem_type!=TensorProto.DOUBLE]
+        del graph.value_info[:]
+        graph.value_info.extend(kept)
+    return names
+
+
 def export_model(model, atlas, destination, *, reference_origin, rtol=1e-3, atol=1e-4):
     import onnx
     import onnxruntime as ort
@@ -40,6 +66,7 @@ def export_model(model, atlas, destination, *, reference_origin, rtol=1e-3, atol
     unsupported_domains=sorted({node.domain for node in graph.graph.node if node.domain not in {'','ai.onnx'}})
     if unsupported_domains:raise ValueError(f'Unresolved nonstandard ONNX domains: {unsupported_domains}')
     operators=sorted({node.op_type for node in graph.graph.node})
+    demoted=demote_float64_constants(graph,destination)
     onnx.save_model(graph,str(path))
     del graph
     onnx.checker.check_model(str(path))
@@ -64,7 +91,7 @@ def export_model(model, atlas, destination, *, reference_origin, rtol=1e-3, atol
                        'layout':'NCHW RGB: first view left, second view right; values [0,1]'},
               'outputs':{name:list(shape) for name,shape in OUTPUT_SHAPES.items()},
               'preprocessing':'upstream load_and_preprocess_images(mode=pad); no external ImageNet normalization',
-              'fixed_grid_rope_modules':replaced,'operators':operators,'opset':18,'files':files,
+              'fixed_grid_rope_modules':replaced,'float64_constants_demoted':demoted,'operators':operators,'opset':18,'files':files,
               'validation':{'onnx_reference_passed':True,'specialization_parity_passed':True,
                             'rtol':rtol,'atol':atol,'errors':errors,'seconds':time.perf_counter()-start},
               'pipegen_verified':False,'tensorrt_verified':False}

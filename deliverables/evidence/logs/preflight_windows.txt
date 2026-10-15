@@ -1,0 +1,24 @@
+{
+  "platform": "Windows-11-10.0.26200-SP0",
+  "machine": "AMD64",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "disk_free_gb": 32.19,
+  "DISPLAY": null,
+  "session_type": null,
+  "wsl": false,
+  "nvidia_smi": {
+    "exit_code": 0,
+    "stdout": "Thu Oct 15 23:07:38 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 595.76                 Driver Version: 595.76         CUDA Version: 13.2     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                  Driver-Model | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA GeForce RTX 3050 ...  WDDM  |   00000000:01:00.0 Off |                  N/A |\n| N/A   42C    P8              4W /   60W |     559MiB /   4096MiB |      6%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|    0   N/A  N/A            4036    C+G   ...ram Files\\Zen Browser\\zen.exe      N/A      |\n|    0   N/A  N/A            5532    C+G   ..._cw5n1h2txyewy\\SearchHost.exe      N/A      |\n|    0   N/A  N/A            8100    C+G   ...2txyewy\\CrossDeviceResume.exe      N/A      |\n|    0   N/A  N/A            8604    C+G   ...NVIDIA App\\CEF\\NVIDIA App.exe      N/A      |\n|    0   N/A  N/A            9532    C+G   ...y\\StartMenuExperienceHost.exe      N/A      |\n|    0   N/A  N/A           10364    C+G   ....0.4283.45\\msedgewebview2.exe      N/A      |\n|    0   N/A  N/A           10956    C+G   ...ram Files\\Zen Browser\\zen.exe      N/A      |\n|    0   N/A  N/A           11452    C+G   ...s\\PowerToys.ColorPickerUI.exe      N/A      |\n|    0   N/A  N/A           11880    C+G   ...Local\\PowerToys\\PowerToys.exe      N/A      |\n|    0   N/A  N/A           11940    C+G   ...Toys\\PowerToys.FancyZones.exe      N/A      |\n|    0   N/A  N/A           12064    C+G   ...pps\\PowerToys.QuickAccess.exe      N/A      |\n|    0   N/A  N/A           12388    C+G   ...8bbwe\\Microsoft.CmdPal.UI.exe      N/A      |\n|    0   N/A  N/A           12816    C+G   ...UI3Apps\\PowerToys.Peek.UI.exe      N/A      |\n|    0   N/A  N/A           13888    C+G   ...7hta09mmv6hy\\Build\\Lively.exe      N/A      |\n|    0   N/A  N/A           14312    C+G   ...5n1h2txyewy\\TextInputHost.exe      N/A      |\n|    0   N/A  N/A           19704    C+G   ...yb3d8bbwe\\WindowsTerminal.exe      N/A      |\n|    0   N/A  N/A           20720    C+G   ...are\\IntelGraphicsSoftware.exe      N/A      |\n+-----------------------------------------------------------------------------------------+",
+    "stderr": ""
+  },
+  "docker": {
+    "error": "[WinError 2] The system cannot find the file specified"
+  },
+  "pipegen_executable": null,
+  "torch": {
+    "version": "2.7.1+cpu",
+    "cuda_build": null,
+    "cuda_available": false,
+    "mps_available": false
+  }
+}

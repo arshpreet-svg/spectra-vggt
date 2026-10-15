@@ -1,0 +1,4 @@
+﻿PipeGen installer files downloaded from https://developer.craftifai.com/products/pipegen (Linux x86_64 -> Download .deb / Install Pre-Requisites, signed in), 2026-10-15 23:20 +05:30
+PipeGen_0.5.1_amd64.deb  88214664 bytes  sha256 fda8e0d45423f14929c291d054ef6e5d01f1e0c1586536c5b2779777efe6586c
+pipegen_prerequisites_ubuntu_x86.sh  11194 bytes  sha256 ea4cfe4dcae44a33997b227e8e08ce8082408b40288beb9cb34ab310f1b7988a
+Status: downloaded only. NOT installed (requires WSL2/Ubuntu + X11, not present on this machine).
