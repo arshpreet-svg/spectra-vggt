@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+.pytest_cache/
+artifacts/*
+!artifacts/.gitkeep
+*.log
+
+# Local bundles, credentials and machine-specific evidence
+spectra-handoff.zip
+.env
+.env.*
+!.env.example
+.DS_Store
+evidence/*
+!evidence/status.json
+!evidence/tests.txt
+!evidence/upstream-git-status.txt

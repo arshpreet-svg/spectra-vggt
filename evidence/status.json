@@ -1,0 +1,51 @@
+{
+  "implemented": [
+    "bounded image/video input",
+    "upstream VGGT wrapper",
+    "depth-unprojected world points",
+    "Open3D filtering and PLY readback",
+    "JSON/NPZ artifacts",
+    "Flask job API",
+    "local Three.js viewer",
+    "validated external JSON adapter",
+    "detector-driven pause-scan advisory",
+    "fixed RGB atlas ONNX export wrapper",
+    "export-only fixed-grid RoPE specialization",
+    "ONNX checker and PyTorch/ORT parity gate",
+    "strict ONNX and TensorRT Flask backends",
+    "DeepStream raw tensor metadata reference app",
+    "engine numerical comparison command",
+    "PipeGen requirement and authored reference architecture"
+  ],
+  "tested": [
+    "12 tests passed, including explicitly synthetic ONNX export/ORT roundtrip with actual upstream attention/RoPE",
+    "FP32 and FP16 fixed-grid RoPE equality with upstream",
+    "atlas view ordering",
+    "known camera/depth geometry decoding",
+    "Flask upload/export and PLY readback",
+    "Python compilation",
+    "viewer JavaScript syntax",
+    "local dependency consistency",
+    "earlier live Flask HTTP 200 checks"
+  ],
+  "not_verified": [
+    "successful pretrained VGGT forward pass",
+    "full pretrained VGGT ONNX export/parity",
+    "TensorRT engine compile/execution",
+    "DeepStream target execution",
+    "PipeGen installation/custom-model acceptance/five-stage workflow",
+    "genuine PipeGen speed report",
+    "browser WebGL rendering",
+    "hackathon compliance"
+  ],
+  "checkpoint_status": "Incomplete 681 MiB file; curl exited 92: HTTP/2 stream was not closed cleanly: CANCEL (err 8)",
+  "upstream_commit": "a288dd0f14786c93483e45524328726ab7b1b4ce",
+  "target_laptop_user_report": {
+    "driver": "616.92",
+    "gpu": "RTX 5060 Laptop",
+    "vram_mib": 8151,
+    "wsl": "not installed; download started"
+  },
+  "deadline_user_report": "2026-10-15 22:00 Asia/Kolkata",
+  "active_scope": "VGGT only; provided deployment source is not a vendor-generated or certified PipeGen export"
+}

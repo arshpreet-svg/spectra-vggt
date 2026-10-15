@@ -1,0 +1,17 @@
+{
+  "kind": "spectra_reference_architecture",
+  "is_pipegen_generated_pir": false,
+  "model": "VGGT",
+  "blocks": [
+    {"id":"decode","implementation":"OpenCV VideoCapture","output":"ordered RGB frames"},
+    {"id":"sample","implementation":"spectra.inputs.prepare_frames","views":2,"spacing_seconds":1.0},
+    {"id":"preprocess","implementation":"upstream load_and_preprocess_images(mode=pad)","view_shape":[3,518,518]},
+    {"id":"pack","implementation":"spectra.deployment.contract.pack_views","shape":[1,3,518,1036]},
+    {"id":"inference","implementation":"custom ONNX -> TensorRT -> DeepStream nvinfer","compiled":false},
+    {"id":"decode_geometry","implementation":"spectra.deployment.contract.decode_outputs"},
+    {"id":"filter_export","implementation":"spectra.reconstruction.export_predictions","formats":["PLY","NPZ","JSON"]},
+    {"id":"event","event":"geometry_ready","action":"inspect_reconstruction"}
+  ],
+  "edges":[["decode","sample"],["sample","preprocess"],["preprocess","pack"],["pack","inference"],["inference","decode_geometry"],["decode_geometry","filter_export"],["filter_export","event"]],
+  "scope":"one two-view reconstruction window; not continuous registered SLAM"
+}
