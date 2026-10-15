@@ -1,0 +1,9 @@
+Environment check - 2026-10-15 21:48 IST (Windows 11, machine "Atharv")
+GPU: NVIDIA GeForce RTX 3050 Laptop, 4096 MiB VRAM, driver 595.76 (CUDA 13.2 capable), WDDM
+RAM: 32 GB total, 15.2 GB free | Disk C: 33.2 GB free
+Python 3.12.10 | torch 2.13.0+cpu (cuda.is_available()=False) | onnxruntime 1.21.1 (CPU only)
+TensorRT python: NOT INSTALLED | trtexec: NOT FOUND | nvcc/CUDA toolkit: NOT FOUND
+Docker: NOT INSTALLED | WSL: NOT INSTALLED | CraftifAI PipeGen: NOT FOUND on this machine
+Windows Smart App Control: ON (enforcing)
+VGGT pretrained checkpoint: not present locally
+Result: real VGGT export, TensorRT compile and PipeGen run were NOT executed on this machine.
