@@ -1,0 +1,8 @@
+﻿python.exe : WARNING: Connection interrupted while downloading.
+At line:1 char:369
++ ... ython.exe"; & $py -m pip install -q torch==2.7.1 torchvision==0.22.1  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: Connec...le downloading.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+WARNING: Attempting to resume incomplete download (10.1 MB/216.0 MB, attempt 1)

@@ -1,0 +1,10 @@
+﻿fetching config.json
+.\.venv\Scripts\python.exe : Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to 
+enable higher rate limits and faster downloads.
+At line:1 char:423
++ ... _WARNING=1; .\.venv\Scripts\python.exe scripts\fetch_checkpoint.py *> ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Warning: You ar...ster downloads.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+fetching model.safetensors
