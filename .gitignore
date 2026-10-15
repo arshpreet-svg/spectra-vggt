@@ -16,3 +16,4 @@ evidence/*
 !evidence/tests.txt
 !evidence/upstream-git-status.txt
 .venv-gpu/
+deliverables/evidence/spectra_demo.mp4

@@ -21,7 +21,8 @@ const controls = new OrbitControls(camera,renderer.domElement);
 controls.enableDamping = true;
 const resize = () => {
   const {width,height} = $('viewer').getBoundingClientRect();
-  renderer.setSize(width,height); camera.aspect=width/height; camera.updateProjectionMatrix();
+  // false: keep CSS sizing; inline pixel sizes made the flex container grow on every resize.
+  renderer.setSize(width,height,false); camera.aspect=width/height; camera.updateProjectionMatrix();
 };
 new ResizeObserver(resize).observe($('viewer'));
 function fit() {

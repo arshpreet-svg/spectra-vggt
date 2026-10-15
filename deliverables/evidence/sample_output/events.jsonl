@@ -1,0 +1,1 @@
+{"schema_version": 1, "event": "geometry_ready", "action": "inspect_reconstruction", "backend": "onnx", "point_count": 51678, "scale": "arbitrary; uncalibrated", "ply": "C:\\Users\\Atharv\\spectra-vggt\\artifacts\\e2e-onnx-run1\\cloud.ply", "metadata": "C:\\Users\\Atharv\\spectra-vggt\\artifacts\\e2e-onnx-run1\\metadata.json", "pipegen_execution_verified": false}
