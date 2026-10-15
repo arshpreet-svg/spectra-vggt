@@ -1,17 +1,130 @@
-# SPECTRA — VGGT geometric mapping with a PipeGen deployment adapter
+# SPECTRA — two-view 3D reconstruction from video with VGGT
+
+**CraftifAI PipeGen Buildathon · Track A · Participant CRA003**
+
+**In one line:** SPECTRA turns a short video of a static scene into a colored 3D point cloud
+and camera positions using VGGT-1B, and sends out a PLY file plus a JSON `geometry_ready` event.
+
+![SPECTRA viewer showing the real VGGT reconstruction](deliverables/evidence/viewer_1_result.jpg)
+
+*Real result: two frames from `kitchen-sample.mp4` → VGGT-1B (ONNX Runtime, CPU) → 51,678-point
+cloud with the camera path (green line), shown in the SPECTRA viewer.*
+
+## Status at a glance
+
+| Item | Status | Evidence |
+|---|---|---|
+| Official `facebook/VGGT-1B` checkpoint, SHA256 verified, loaded | **Verified** | [`checkpoint_verification.txt`](deliverables/evidence/checkpoint_verification.txt) |
+| Real PyTorch inference → ONNX export → ONNX Runtime parity (max depth error 4.1e-5) | **Verified** | [`onnx_parity_report.md`](deliverables/evidence/onnx_parity_report.md) |
+| End-to-end video → VGGT → PLY + JSON event (CPU, ONNX Runtime) | **Verified** | [`sample_output/`](deliverables/evidence/sample_output), [`e2e log`](deliverables/evidence/logs/e2e_onnx_cpu_run1.txt) |
+| Web viewer (Flask + Three.js) showing the result | **Verified** | [`viewer_*.jpg`](deliverables/evidence) |
+| PipeGen Requirement → Pipeline IR → Model → Compiler → Run | **Blocked** | see [Limits](#what-it-does-not-handle-yet) |
+| TensorRT engine, PipeGen speed report, Pipeline IR screenshot | **Not produced** | — |
+
+Nothing in this repository is simulated: every number below comes from a file in
+`deliverables/evidence/`.
+
+## Who is it for, and what changes for them?
+
+A disaster-response or robotics team member who needs the layout of a room they cannot
+safely walk through. Today they scroll through photos, or need a LiDAR scanner or a slow
+multi-photo reconstruction. With SPECTRA, two frames from a phone video give camera poses and
+a 3D point cloud (51,678 points in our test) with no scanner and no calibration, in about one
+minute on a laptop CPU. Scale is relative, not metres.
+
+## What the pipeline sends out, and who acts on it
+
+After each reconstruction SPECTRA writes:
+
+- `cloud.ply` — colored point cloud, re-read through Open3D to verify it before anything is announced;
+- `metadata.json` — camera intrinsics/extrinsics and centers, bounds, runtime, model SHA256;
+- `events.jsonl` — the actionable event, emitted only after real geometry exists:
+
+```json
+{"schema_version": 1, "event": "geometry_ready", "action": "inspect_reconstruction",
+ "backend": "onnx", "point_count": 51678, "scale": "arbitrary; uncalibrated",
+ "ply": ".../cloud.ply", "metadata": ".../metadata.json", "pipegen_execution_verified": false}
+```
+
+The operator inspects the cloud in the SPECTRA viewer; robotics software can consume the PLY
+and JSON directly. Real sample: [`deliverables/evidence/sample_output/`](deliverables/evidence/sample_output).
+
+## What the pipeline does, step by step
+
+1. Decode the input video.
+2. Sample two overlapping frames.
+3. VGGT pad-preprocess each to 518×518 and pack side by side into one `1×3×518×1036` FP32 input.
+4. Run VGGT-1B: aggregator backbone + camera and depth heads (point-map and tracking heads disabled).
+5. Decode camera poses from `pose_enc` [1,2,9].
+6. Unproject `depth` [1,2,518,518] with VGGT intrinsics/extrinsics into 3D points.
+7. Keep confident points (`depth_conf`), voxel/outlier filtering with Open3D.
+8. Write PLY + metadata JSON, emit the `geometry_ready` event, show in the viewer.
+
+Built outside PipeGen: a custom ONNX export of VGGT (fixed two-view input, external weight file
+because the model exceeds 2 GB). ONNX Runtime first rejected the export because upstream
+`make_sincos_pos_embed` mixes float32 and float64 in an Einsum; SPECTRA stores those four
+small tables as float32 after export (upstream VGGT untouched), and the result matches PyTorch
+within the original tolerances — see [`onnx_parity_report.md`](deliverables/evidence/onnx_parity_report.md).
+
+## Input tested
+
+`artifacts/kitchen-sample.mp4`, built by `scripts/make_sample_video.py` from the real kitchen
+scene images in upstream VGGT's examples (8 frames, 4 fps). Not newly filmed footage.
+
+## How fast, on what hardware
+
+Measured on **CPU only** (Intel Core i5-12450H, Windows 11, ONNX Runtime 1.23.2):
+
+| Measurement | Value | Source |
+|---|---|---|
+| VGGT forward pass (2 views) | 37.7 s | `sample_output/metadata.json` → `runtime.forward_seconds` |
+| Full two-view reconstruction | 63.4 s | `metadata.json` → `inference_seconds` |
+| Same, second run through the viewer | 44.1 s | `viewer_1_result.jpg` |
+
+GPU available: NVIDIA RTX 3050 Laptop, 4 GB, driver 595.76. **No GPU/TensorRT timing and no
+PipeGen speed report exist yet.**
+
+## What it does not handle yet
+
+- **PipeGen stages not run.** PipeGen 0.5.1 (downloaded, SHA256 in
+  [`pipegen_install_log.txt`](deliverables/evidence/pipegen_install_log.txt)) needs WSL2 + Docker +
+  a ~12 GB DeepStream image. WSL2's own download timed out twice on a 0.1–0.2 MB/s connection
+  ([`wsl_install.txt`](deliverables/evidence/logs/wsl_install.txt)). The validated ONNX bundle and
+  [`pipegen/requirement.md`](pipegen/requirement.md) are ready for PipeGen's custom-model flow
+  ([`docs/RTX5060_HANDOFF.md`](docs/RTX5060_HANDOFF.md)).
+- No TensorRT engine yet; FP32 VGGT-1B weights (4.6 GB) exceed the 4 GB GPU, so FP16 is planned.
+- Two views per reconstruction; separate reconstructions are not merged.
+- Scale is relative (not metres).
+- Tested on one indoor scene.
+
+## Run it
+
+```powershell
+git clone --recurse-submodules https://github.com/atharv-namdeo/CraftifAIHackathon_CRA002.git
+cd CraftifAIHackathon_CRA002
+py -3.12 -m venv .venv; .venv\Scripts\Activate.ps1
+python -m pip install torch==2.7.1 torchvision==0.22.1 --index-url https://download.pytorch.org/whl/cpu
+python -m pip install "numpy<2" Pillow einops safetensors huggingface_hub -r requirements-spectra.txt -r requirements-export.txt
+python -m pip install --no-deps -e ./vggt
+python scripts/fetch_checkpoint.py                      # downloads + SHA256-verifies VGGT-1B (~5 GB)
+powershell -File scripts/run_export_windows.ps1 -Output artifacts/vggt-onnx-run2   # real export + parity
+python scripts/make_sample_video.py
+python -m spectra.deployment.reference artifacts/kitchen-sample.mp4 --backend onnx --device cpu `
+  --bundle artifacts/vggt-onnx-run2 --output artifacts/e2e-run
+# Viewer:
+$env:SPECTRA_BACKEND='onnx'; $env:SPECTRA_DEVICE='cpu'; $env:SPECTRA_MAX_FRAMES='2'
+$env:SPECTRA_DEPLOYMENT_DIR="$PWD\artifacts\vggt-onnx-run2"; python -m spectra.app   # http://127.0.0.1:5000
+```
+
+Large files are not in Git: checkpoint (`artifacts/checkpoints/VGGT-1B`, 5.03 GB) and ONNX bundle
+(`artifacts/vggt-onnx-run2`, 4.6 GB); both are reproduced by the commands above.
+
+---
+
+# Technical details
 
 VGGT is the only model. The official upstream repository is preserved in `vggt/`,
 commit `a288dd0f14786c93483e45524328726ab7b1b4ce`, with no source/pin changes.
-
-Implemented: two-view video/image sampling, VGGT camera/depth prediction, depth
-unprojection, Open3D filtering, valid PLY/JSON/NPZ export, Flask API and local Three.js
-viewer. Deployment source adds a fixed ONNX interface, parity gates, TensorRT runtime,
-DeepStream reference application and PipeGen custom-model requirement/architecture.
-
-**Not yet verified:** pretrained VGGT export, NVIDIA TensorRT/DeepStream execution,
-PipeGen installation/custom-model acceptance, actual PIR/engine/speed report, browser
-WebGL rendering, or hackathon compliance. Source readiness is not vendor certification.
-No substitute model, fabricated engine, benchmark or report is supplied.
 
 ## Start here
 
