@@ -1,7 +1,27 @@
-# Draft submission answers (NOT submitted)
-**Track:** A — PipeGen. **Project:** SPECTRA — two-view 3D reconstruction from video with VGGT as the only model.
-**Model:** official facebook/VGGT-1B (model.safetensors, SHA256 f164acf6…467e), camera + depth heads, 2 views, input 1x3x518x1036 FP32; planned TensorRT FP16 compute with FP32 I/O.
-**Implemented:** ONNX export with PyTorch-specialization and ONNX Runtime parity gates, checkpoint hash gate, TensorRT builder, engine validator, Python reference pipeline, DeepStream raw-tensor app, pose/depth decoding to PLY/JSON, Flask viewer.
-**Tested:** local unit tests with a synthetic model only.
-**Not yet verified:** real-weight export, TensorRT engine, PipeGen stages (Requirement/PIR/Model/Compiler/Run), speed report and live video run. Available GPU is an RTX 3050 Laptop (4 GB), not the RTX 5060; PipeGen v0.5.1 could not be installed on it; checkpoint download was still in progress over a ~0.2–1 MB/s connection at submission time.
-**Evidence:** deliverables/evidence/ (environment check, download/install logs). No measured performance is claimed.
+# Draft answers — PipeGen Hackathon Feedback Form (NOT submitted)
+
+Form: https://forms.gle/eJyeCKCG2UH757QZ8 (22 questions). Answers marked **[PENDING RUN]**
+must be filled from what actually happens on the RTX 5060 machine (`docs/RTX5060_HANDOFF.md`).
+
+| # | Question | Draft answer |
+|---|---|---|
+| 1 | Full name | (you) |
+| 2 | Participant ID | (from organizer email, e.g. CRA0xx) |
+| 3 | Edge AI pipeline experience | (your choice) |
+| 4 | Hardware used | x86-64 Linux PC with NVIDIA GPU — **only if** PipeGen runs on the RTX 5060 Linux/WSL2 machine |
+| 5 | Model/code source | Local (own Python repository + custom VGGT ONNX) |
+| 6 | Input type | Sample video (kitchen sequence from upstream VGGT images) and/or Own video **[PENDING RUN]** |
+| 7 | Progress achieved | **[PENDING RUN]** — current truthful answer: "Could not run PipeGen" |
+| 8 | Time to video output | **[PENDING RUN]** — currently "Never got video" |
+| 9 | Work outside PipeGen | Outside code (SPECTRA export/decoding), Terminal commands |
+| 10 | Manual fixes | Custom ONNX export of VGGT with fixed two-view atlas and external weights; anything hand-edited in PipeGen output **[PENDING RUN]** |
+| 11–12 | Ratings | **[PENDING RUN]** — rate only components actually used |
+| 13 | Needed fixes | **[PENDING RUN]** |
+| 14 | Most helpful feature | **[PENDING RUN]** |
+| 15–16 | Where failures occurred / description (include v0.5.1) | **[PENDING RUN]**; so far: setup blocked on the original Windows laptop (no WSL2, insufficient disk, slow network) |
+| 17 | Confusion points | Lab document not accessible to our account; Windows/WSL2 disk needs |
+| 18 | Single biggest improvement | **[PENDING RUN]** |
+| 19 | Problem evidence URL | https://github.com/arshpreet-svg/spectra-vggt/tree/main/deliverables/evidence |
+| 20 | Manual build timeframe | (your estimate) |
+| 21 | Future use | (your choice) |
+| 22 | Additional feedback | Project: SPECTRA — VGGT-only two-view 3D reconstruction (camera + depth → PLY/JSON) |
